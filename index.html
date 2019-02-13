@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"/>
+<head>
+	<title>Ohm's Law - Volts</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<style type="text/css">
+		#grid1 {
+			position: fixed;
+			top: 50%;
+			left: 20px;
+			transform: translate(0%, -50%);
+			display: grid;
+			width: 128px;
+			grid-template-columns: 128px;
+			grid-row-gap: 10px;
+		}
+		#grid2 {
+			position: fixed;
+			top: 50%;
+			right: 20px;
+			transform: translate(0%, -50%);
+			display: grid;
+			width: 128px;
+			grid-template-columns: 128px;
+			grid-row-gap: 10px;
+		}
+		#middle {
+			display: grid;
+			grid-template-columns: 128px 128px 128px;
+			grid-template-rows: 64px 128px;
+			grid-template-areas: 
+			"label label label"
+			"left text right";
+			justify-items: center;
+		}
+		img {
+			width: 128px;
+			height: auto;
+		}
+		.border {
+			border: 1px solid black;
+			width: 128px;
+			height: 128px;
+		}
+		.centered {
+		    position: fixed;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		}
+		#divL {
+			grid-area: left;
+		}
+		#divR {
+			grid-area: right;
+		}
+		#text {
+			grid-area: text;
+			align-self: center;
+			font-size: 16pt;
+		}
+		#label {
+			grid-area: label;
+			align-self: center;
+			font-size: 20pt;
+		}
+	</style>
+	<script type="text/javascript">
+		var left;
+		var moving;
+		function drag(ev) {
+			ev.dataTransfer.setData("text", ev.target.id);
+			moving = ev.target;
+			left = ev.target.parentNode;
+		}
+		function dropMiddle(ev, int) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+		    ev.target.appendChild(document.getElementById(data));
+		    dragLock(int);
+		    var id = $(ev.target).children(':first').attr('id');
+		    var img = document.getElementById(id);
+		    img.setAttribute("draggable", "true");
+		    var value = $('#' + id).attr('value');
+		    left.innerHTML = "";
+		    calculate();
+		}
+		function drop(ev, int) {
+			dragOpen(int);
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+		    ev.target.appendChild(document.getElementById(data));
+		    left.innerHTML = "";
+		    calculate();
+		}
+		function allowDrop(ev, t) {
+			if(t.innerHTML == "" && $(t.id).attr('type') == $(moving.id).attr('type')) {
+	    	ev.preventDefault();
+	    }
+		}
+		function dragLock(int) {
+			var imgs;
+			if(int == 1) {
+				imgs = document.getElementsByClassName("ohms-image");
+			} else if(int == 2) {
+				imgs = document.getElementsByClassName("amps-image");
+			}
+			for(let i = 0; i < imgs.length; i++) {
+				imgs[i].setAttribute("draggable", "false");
+			}
+		}
+		function dragOpen(int) {
+			var imgs;
+			if(int == 1) {
+				imgs = document.getElementsByClassName("ohms-image");
+			} else if(int == 2) {
+				imgs = document.getElementsByClassName("amps-image");
+			}
+			for(let i = 0; i < imgs.length; i++) {
+				imgs[i].setAttribute("draggable", "true");
+			}
+		}
+		function calculate() {
+			var ohms = $('#divL').children(':first').attr('value');
+			var amps = $('#divR').children(':first').attr('value');
+			console.log(ohms * amps);
+			var text = document.getElementById('text');
+			if(ohms != null && amps != null) {
+				text.innerHTML = ohms * amps;
+			} else {
+				text.innerHTML = "--";
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="grid1" >
+		<div class="border" ondrop="drop(event, 1)" ondragover="allowDrop(event, this)" class="ohms-grid" id="1" type='ohms'>
+			<img src="/images/Coin_00.png" value="1" type='ohms' id="left-img-1" ondragstart="drag(event)" draggable="true" class="ohms-image">
+		</div>
+		<div class="border" ondrop="drop(event, 1)" ondragover="allowDrop(event, this)" class="ohms-grid" id="2" type='ohms'>
+			<img src="/images/Coin_01.png" value="2" type='ohms' id="left-img-2" ondragstart="drag(event)" draggable="true" class="ohms-image">
+		</div>
+		<div class="border" ondrop="drop(event, 1)" ondragover="allowDrop(event, this)" class="ohms-grid" id="3" type='ohms'>
+			<img src="/images/Coin_02.png" draggable="true" ondragstart="drag(event)" id="ohms3" class="ohms-image" value="3" type='ohms'>
+		</div>
+		<div class="border" ondrop="drop(event, 1)" ondragover="allowDrop(event, this)" class="ohms-grid" id="4" type='ohms'>
+			<img src="/images/Coin_03.png" draggable="true" ondragstart="drag(event)" id="ohms4" class="ohms-image" value="4" type='ohms'>
+		</div>
+		<div class="border" ondrop="drop(event, 1)" ondragover="allowDrop(event, this)" class="ohms-grid" id="5" type='ohms'>
+			<img src="/images/Coin_04.png" value="5" type='ohms' draggable="true" ondragstart="drag(event)" class="ohms-image" id="ohms5">
+		</div>
+	</div>
+	<div class="centered" id="middle" style="transform: translate(-50%, -66.666%);">
+		<p id="label"><u>Volts</u></p>
+		<div ondrop="dropMiddle(event, 1)" ondragover="allowDrop(event, this)" id="divL" type='ohms' class="border"></div>
+		<p id="text">--</p>
+		<div ondrop="dropMiddle(event, 2)" ondragover="allowDrop(event, this)" id="divR" type='amps' class="border"></div>
+	</div>
+	<div id="grid2">
+		<div class="border" ondrop="drop(event, 2)" ondragover="allowDrop(event, this)" class="amps-grid" id="a1" type='amps'>
+			<img src="/images/Coin_10.png" value="1" type='amps' draggable="true" ondragstart="drag(event)" class="amps-image" id="amps1">
+		</div>
+		<div class="border" ondrop="drop(event, 2)" ondragover="allowDrop(event, this)" class="amps-grid" id="a2" type='amps'>
+			<img src="/images/Coin_11.png" value="2" type='amps' draggable="true" ondragstart="drag(event)" class="amps-image" id="amps2">
+		</div>
+		<div class="border" ondrop="drop(event, 2)" ondragover="allowDrop(event, this)" class="amps-grid" id="a3" type='amps'>
+			<img src="/images/Coin_12.png" value="3" type='amps' draggable="true" ondragstart="drag(event)" class="amps-image" id="amps3">
+		</div>
+		<div class="border" ondrop="drop(event, 2)" ondragover="allowDrop(event, this)" class="amps-grid" id="a4" type='amps'>
+			<img src="/images/Coin_13.png" value="4" type='amps' draggable="true" ondragstart="drag(event)" class="amps-image" id="amps4">
+		</div>
+		<div class="border" ondrop="drop(event, 2)" ondragover="allowDrop(event, this)" class="amps-grid" id="a5" type='amps'>
+			<img src="/images/Coin_14.png" value="5" type='amps' draggable="true" ondragstart="drag(event)" class="amps-image" id="amps5">
+		</div>
+	</div>
+</body>
+</html>
