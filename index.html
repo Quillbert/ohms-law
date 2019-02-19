@@ -127,15 +127,21 @@
 			var ohms = $('#divL').children(':first').attr('value');
 			var amps = $('#divR').children(':first').attr('value');
 			var text = document.getElementById('text');
+			var answer;
 			if(ohms != null && amps != null) {
 				if(type == 0) {
-					text.innerHTML = ohms * amps;
+					answer = (ohms * amps);
 				} else {
-					text.innerHTML = ohms/amps;
+					answer = (ohms/amps);
 				}
 			} else {
-				text.innerHTML = "--";
+				answer = "--";
 			}
+			answer = answer.toString();
+			if(answer.length > 5) {
+				answer = answer.substring(0,5);
+			}
+			text.innerHTML = answer;
 		}
 		function update(t) {
 			var oParent = $('#divL').children(':first').attr('parent');
@@ -196,7 +202,7 @@
 	<h1 style="text-align: center;"><u>Ohm's Law Demonstration</u></h1>
 	<br>
 	<form id="selector" style="text-align: center;" onchange="update(this)">
-		<label><input type="radio" name="choice" value="volts" checked>Volts</label>
+		<label><input type="radio" name="choice" value="volts" checked="checked">Volts</label>
 		<label><input type="radio" name="choice" value="ohms">Ohms</label>
 		<label><input type="radio" name="choice" value="amps">Amps</label>
 	</form>
