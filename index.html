@@ -6,20 +6,20 @@
 	<script type="text/javascript" src="jquery.js"></script>
 	<style type="text/css">
 		#grid1 {
-			position: fixed;
-			top: 50%;
+			position: absolute;
+			top: 20px;
 			left: 20px;
-			transform: translate(0%, -50%);
+			/*transform: translate(0%, -50%);*/
 			display: grid;
 			width: 128px;
 			grid-template-columns: 128px;
 			grid-row-gap: 10px;
 		}
 		#grid2 {
-			position: fixed;
-			top: 50%;
+			position: absolute;
+			top: 20px;
 			right: 20px;
-			transform: translate(0%, -50%);
+			/*transform: translate(0%, -50%);*/
 			display: grid;
 			width: 128px;
 			grid-template-columns: 128px;
@@ -35,7 +35,7 @@
 			justify-items: center;
 		}
 		img {
-			width: 128px;
+			width: 100%;
 			height: auto;
 		}
 		.border {
@@ -45,7 +45,7 @@
 			background-color: white;
 		}
 		.centered {
-		    position: fixed;
+		    position: absolute;
 		    top: 50%;
 		    left: 50%;
 		    transform: translate(-50%, -50%);
